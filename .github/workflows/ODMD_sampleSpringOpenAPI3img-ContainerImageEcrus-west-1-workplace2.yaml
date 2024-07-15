@@ -1,0 +1,34 @@
+#ODMD GENERATED WORKFLOW, don't change unless you are sure
+
+name: ODMD_sampleSpringOpenAPI3img-ContainerImageEcrus-west-1-workplace2
+on:
+  workflow_dispatch:
+    inputs:
+      aws_credentials:
+        type: string
+        description: | 
+          Your AWS credentials in the format:
+          [0123456789_MyRole_profile]
+          aws_access_key_id=01234_id
+          aws_secret_access_key=56689_secret
+          aws_session_token=token0123456789
+jobs:
+  odmd_job:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - uses: ondemandenv/build@main
+        with:
+          aws_credentials: ${{github.event.inputs.aws_credentials}}
+        env:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ODMD_buildId: sampleSpringOpenAPI3img
+          ODMD_workDirs: .
+          ODMD_buildType: ContainerImageEcr
+          ODMD_awsRegion: us-west-1
+          ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3img_ContainerImageEcrus_west_1_workplace2'] }}
+
+#
