@@ -22,8 +22,9 @@ export class CdkStack extends cdk.Stack {
             taskImageOptions: {
                 image: ContainerImage.fromEcrRepository(
                     Repository.fromRepositoryName(this, 'repo', myEnver.appImgRepoRef.getSharedValue(this)),
-                    myEnver.appImgLatestRef.getSharedValue(this)
-                )
+                    myEnver.appImgLatestRef.getSharedValue(this),
+                ),
+                containerPort: 8080
             },
             publicLoadBalancer: true
         })
