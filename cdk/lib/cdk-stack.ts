@@ -21,7 +21,8 @@ export class CdkStack extends cdk.Stack {
             vpc: new Vpc(this, 'vpc', {natGateways: 0}),
             taskImageOptions: {
                 image: ContainerImage.fromEcrRepository(
-                    Repository.fromRepositoryName(this, 'repo', myEnver.appImgRef.getSharedValue(this)),
+                    Repository.fromRepositoryName(this, 'repo', myEnver.appImgRepoRef.getSharedValue(this)),
+                    myEnver.appImgLatestRef.getSharedValue(this)
                 )
             },
             publicLoadBalancer: true
