@@ -26,7 +26,7 @@ jobs:
         env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ODMD_buildId: sampleSpringOpenAPI3cdk
-          ODMD_workDirs: .
+          ODMD_workDirs: cdk
           ODMD_buildType: CdkGithubWF
           ODMD_awsRegion: us-west-1
           ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3cdk_CdkGithubWFus_west_1_workplace2'] }}
