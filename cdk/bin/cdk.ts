@@ -27,7 +27,7 @@ async function main() {
         }
     } as StackProps;
 
-    new CdkStack(app, 'theOne', props)
+    new CdkStack(app, OndemandContracts.inst.springOpen3Cdk.theOne.getRevStackNames()[0], props)
 }
 
 
