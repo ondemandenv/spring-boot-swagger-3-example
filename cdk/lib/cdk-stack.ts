@@ -9,7 +9,7 @@ import {ApplicationLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-pattern
 import {
     InterfaceVpcEndpoint,
     InterfaceVpcEndpointAwsService,
-    InterfaceVpcEndpointService,
+    InterfaceVpcEndpointService, Port,
     Vpc
 } from "aws-cdk-lib/aws-ec2";
 import {ContainerImage} from "aws-cdk-lib/aws-ecs";
@@ -24,16 +24,7 @@ export class CdkStack extends cdk.Stack {
         const myEnver = OndemandContracts.inst.springOpen3Cdk;
 
         const vpc = new Vpc(this, 'vpc', {natGateways: 0, createInternetGateway: true, maxAzs: 2});
-        new InterfaceVpcEndpoint(this, 'endpoint', {
-            vpc,
-            service: InterfaceVpcEndpointAwsService.ECR,
-            privateDnsEnabled: true
-        })
-        new InterfaceVpcEndpoint(this, 'endpointDocker', {
-            vpc,
-            service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
-            privateDnsEnabled: true
-        })
+
         const fargate = new ApplicationLoadBalancedFargateService(this, 'the', {
             vpc,
             taskImageOptions: {
@@ -45,6 +36,17 @@ export class CdkStack extends cdk.Stack {
             },
             publicLoadBalancer: true
         })
+
+        new InterfaceVpcEndpoint(this, 'endpoint', {
+            vpc,
+            service: InterfaceVpcEndpointAwsService.ECR,
+            privateDnsEnabled: true
+        }).connections.allowFromAnyIpv4(Port.allTraffic())
+        new InterfaceVpcEndpoint(this, 'endpointDocker', {
+            vpc,
+            service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
+            privateDnsEnabled: true
+        }).connections.allowFromAnyIpv4(Port.allTraffic())
 
         new ContractsShareOut(this, new Map<ContractsCrossRefProducer<ContractsEnverCdk>, string>([
             [myEnver.apiEndpoint, fargate.loadBalancer.loadBalancerDnsName],
