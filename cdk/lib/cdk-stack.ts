@@ -23,7 +23,7 @@ export class CdkStack extends cdk.Stack {
 
         const myEnver = OndemandContracts.inst.springOpen3Cdk;
 
-        const vpc = new Vpc(this, 'vpc', {natGateways: 0, createInternetGateway: false, maxAzs: 2});
+        const vpc = new Vpc(this, 'vpc', {natGateways: 0, createInternetGateway: true, maxAzs: 2});
         new InterfaceVpcEndpoint(this, 'endpoint', {
             vpc,
             service: InterfaceVpcEndpointAwsService.ECR,
