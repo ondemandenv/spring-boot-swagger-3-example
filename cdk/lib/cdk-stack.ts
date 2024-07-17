@@ -6,7 +6,12 @@ import {
     OndemandContracts
 } from "@ondemandenv/odmd-contracts";
 import {ApplicationLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-patterns";
-import {Vpc} from "aws-cdk-lib/aws-ec2";
+import {
+    InterfaceVpcEndpoint,
+    InterfaceVpcEndpointAwsService,
+    InterfaceVpcEndpointService,
+    Vpc
+} from "aws-cdk-lib/aws-ec2";
 import {ContainerImage} from "aws-cdk-lib/aws-ecs";
 import {Repository} from "aws-cdk-lib/aws-ecr";
 import {ContractsEnverCdk} from "@ondemandenv/odmd-contracts/lib/odmd-model/contracts-enver-cdk";
@@ -17,8 +22,11 @@ export class CdkStack extends cdk.Stack {
 
 
         const myEnver = OndemandContracts.inst.springOpen3Cdk;
+
+        const vpc = new Vpc(this, 'vpc', {natGateways: 0, createInternetGateway: false, maxAzs: 1});
+        new InterfaceVpcEndpoint(this, '', {vpc, service: InterfaceVpcEndpointAwsService.ECR, privateDnsEnabled: true})
         const fargate = new ApplicationLoadBalancedFargateService(this, 'the', {
-            vpc: new Vpc(this, 'vpc', {natGateways: 0}),
+            vpc,
             taskImageOptions: {
                 image: ContainerImage.fromEcrRepository(
                     Repository.fromRepositoryName(this, 'repo', myEnver.appImgRepoRef.getSharedValue(this)),
