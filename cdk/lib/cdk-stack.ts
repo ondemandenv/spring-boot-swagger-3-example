@@ -29,6 +29,11 @@ export class CdkStack extends cdk.Stack {
             service: InterfaceVpcEndpointAwsService.ECR,
             privateDnsEnabled: true
         })
+        new InterfaceVpcEndpoint(this, 'endpointDocker', {
+            vpc,
+            service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
+            privateDnsEnabled: true
+        })
         const fargate = new ApplicationLoadBalancedFargateService(this, 'the', {
             vpc,
             taskImageOptions: {
