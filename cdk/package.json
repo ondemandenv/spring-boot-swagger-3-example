@@ -9,6 +9,7 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk-diff": "tsc --build && cross-env target_rev_ref=master cdk diff * --profile AdministratorAccess-590184130740",
+    "cdk-deploy": "tsc --build && cross-env target_rev_ref=master cdk deploy *  --require-approval never -v --profile AdministratorAccess-590184130740",
     "cdk-ls": "tsc --build && cross-env target_rev_ref=master cdk ls --profile AdministratorAccess-590184130740"
   },
   "devDependencies": {

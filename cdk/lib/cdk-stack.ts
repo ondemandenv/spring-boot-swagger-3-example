@@ -1,18 +1,9 @@
 import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
-import {
-    ContractsCrossRefProducer,
-    ContractsShareOut,
-    OndemandContracts
-} from "@ondemandenv/odmd-contracts";
+import {ContractsCrossRefProducer, ContractsShareOut, OndemandContracts} from "@ondemandenv/odmd-contracts";
 import {ApplicationLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-patterns";
-import {
-    InterfaceVpcEndpoint,
-    InterfaceVpcEndpointAwsService,
-    InterfaceVpcEndpointService, Port,
-    Vpc
-} from "aws-cdk-lib/aws-ec2";
-import {ContainerImage} from "aws-cdk-lib/aws-ecs";
+import {Vpc} from "aws-cdk-lib/aws-ec2";
+import {ContainerImage, FargatePlatformVersion} from "aws-cdk-lib/aws-ecs";
 import {Repository} from "aws-cdk-lib/aws-ecr";
 import {ContractsEnverCdk} from "@ondemandenv/odmd-contracts/lib/odmd-model/contracts-enver-cdk";
 
@@ -23,30 +14,27 @@ export class CdkStack extends cdk.Stack {
 
         const myEnver = OndemandContracts.inst.springOpen3Cdk;
 
-        const vpc = new Vpc(this, 'vpc', {natGateways: 0, createInternetGateway: true, maxAzs: 2});
+        const vpc = new Vpc(this, 'vpc', {maxAzs: 2, natGateways: 1});
 
-        const fargate = new ApplicationLoadBalancedFargateService(this, 'the', {
+        const repository = Repository.fromRepositoryName(this, 'repo', myEnver.appImgRepoRef.getSharedValue(this));
+        const image = ContainerImage.fromEcrRepository(
+            repository,
+            myEnver.appImgLatestRef.getSharedValue(this),
+        )
+
+        const fargate = new ApplicationLoadBalancedFargateService(this, 'theAlbFargate', {
             vpc,
+            memoryLimitMiB: 2048,
+            platformVersion: FargatePlatformVersion.VERSION1_4,
             taskImageOptions: {
-                image: ContainerImage.fromEcrRepository(
-                    Repository.fromRepositoryName(this, 'repo', myEnver.appImgRepoRef.getSharedValue(this)),
-                    myEnver.appImgLatestRef.getSharedValue(this),
-                ),
-                containerPort: 8080
+                image: image,
+                containerPort: 8080,
             },
             publicLoadBalancer: true
         })
 
-        new InterfaceVpcEndpoint(this, 'endpoint', {
-            vpc,
-            service: InterfaceVpcEndpointAwsService.ECR,
-            privateDnsEnabled: true
-        }).connections.allowFromAnyIpv4(Port.allTraffic())
-        new InterfaceVpcEndpoint(this, 'endpointDocker', {
-            vpc,
-            service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
-            privateDnsEnabled: true
-        }).connections.allowFromAnyIpv4(Port.allTraffic())
+        // @ts-ignore
+        fargate.targetGroup.healthCheck.path = '/bezkoder-api-docs'
 
         new ContractsShareOut(this, new Map<ContractsCrossRefProducer<ContractsEnverCdk>, string>([
             [myEnver.apiEndpoint, fargate.loadBalancer.loadBalancerDnsName],
