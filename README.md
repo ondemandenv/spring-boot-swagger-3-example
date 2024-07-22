@@ -3,11 +3,16 @@
 
 1) mvn building and pushing image to ECR
 2) CDK app in cdk folder, consuming ECR sha tag thru odmd central
-
+3) ECR latest/sha tag event driven CDK app redeployment;
+4) 
 In progress:
 
-1) ECR latest/sha tag event driven CDK app redeployment;
-2) branching/tag create dynamic enver automatically
+1) branching/tag create dynamic enver automatically
+
+to create an enver for branch, we use commit message:
+
+odmd: create <current branch name>@<origin enver>
+odmd: destroy <current branch name>@<origin enver>
 
 
 
