@@ -24,7 +24,7 @@ export class CdkStack extends cdk.Stack {
 
         const fargate = new ApplicationLoadBalancedFargateService(this, 'theAlbFargate', {
             vpc,
-            cpu: 1,
+            cpu: 1024,
             memoryLimitMiB: 2048,
             platformVersion: FargatePlatformVersion.VERSION1_4,
             taskImageOptions: {
