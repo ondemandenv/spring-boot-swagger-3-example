@@ -16,7 +16,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "20.14.9",
     "cross-env": "^7.0.3",
-    "@ondemandenv/odmd-contracts": "0.1.89-j",
+    "@ondemandenv/odmd-contracts": "0.1.89-p",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.5",
     "aws-cdk": "2.149.0",
