@@ -31,7 +31,7 @@ async function main() {
 
     console.log(`JSON.stringify(OndemandContracts.inst.springOpen3Cdk)>>>
     
-    ${JSON.stringify(OndemandContracts.inst.springOpen3Cdk)}
+    ${JSON.stringify(OndemandContracts.inst.springOpen3Cdk, undefined, 2)}
     
     OndemandContracts.inst.springOpen3Cdk)<<<`)
 
