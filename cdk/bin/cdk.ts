@@ -24,14 +24,16 @@ async function main() {
     } as StackProps;
 
 
-    console.log(`JSON.stringify(process.env)>>>`)
-    console.log(JSON.stringify(process.env))
-    console.log(`JSON.stringify(process.env)<<<`)
+    console.log(`JSON.stringify(process.env)>>>
+    ${JSON.stringify(process.env, undefined, 4)}
+    JSON.stringify(process.env)<<<`)
 
 
-    console.log(`JSON.stringify(OndemandContracts.inst.springOpen3Cdk.envers)>>>`)
-    console.log(JSON.stringify(OndemandContracts.inst.springOpen3Cdk.envers))
-    console.log(`JSON.stringify(OndemandContracts.inst.springOpen3Cdk.envers)<<<`)
+    console.log(`JSON.stringify(OndemandContracts.inst.springOpen3Cdk)>>>
+    
+    ${JSON.stringify(OndemandContracts.inst.springOpen3Cdk)}
+    
+    OndemandContracts.inst.springOpen3Cdk)<<<`)
 
     new CdkStack(app, OndemandContracts.inst.springOpen3Cdk.theOne.getRevStackNames()[0], props)
 }
