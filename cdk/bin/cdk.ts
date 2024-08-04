@@ -23,6 +23,8 @@ async function main() {
         }
     } as StackProps;
 
+    new OndemandContracts(app)
+
 
     console.log(`JSON.stringify(process.env)>>>
     ${JSON.stringify(process.env, undefined, 4)}
