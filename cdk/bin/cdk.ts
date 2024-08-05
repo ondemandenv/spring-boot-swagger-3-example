@@ -4,6 +4,7 @@ import * as cdk from 'aws-cdk-lib';
 import {CdkStack} from '../lib/cdk-stack';
 import {OndemandContracts} from "@ondemandenv/odmd-contracts";
 import {StackProps} from "aws-cdk-lib";
+import {ContractsEnverCdk} from "@ondemandenv/odmd-contracts/lib/odmd-model/contracts-enver-cdk";
 
 const app = new cdk.App();
 
@@ -26,18 +27,9 @@ async function main() {
     new OndemandContracts(app)
 
 
-    console.log(`JSON.stringify(process.env)>>>
-    ${JSON.stringify(process.env, undefined, 4)}
-    JSON.stringify(process.env)<<<`)
+    const targetEnver = OndemandContracts.inst.getTargetEnver() as ContractsEnverCdk
 
-
-    console.log(`JSON.stringify(OndemandContracts.inst.springOpen3Cdk)>>>
-    
-    ${JSON.stringify(OndemandContracts.inst.springOpen3Cdk, undefined, 2)}
-    
-    OndemandContracts.inst.springOpen3Cdk)<<<`)
-
-    new CdkStack(app, OndemandContracts.inst.springOpen3Cdk.theOne.getRevStackNames()[0], props)
+    new CdkStack(app, targetEnver.getRevStackNames()[0], props)
 }
 
 
