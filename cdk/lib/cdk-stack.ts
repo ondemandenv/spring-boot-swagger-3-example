@@ -6,13 +6,15 @@ import {Vpc} from "aws-cdk-lib/aws-ec2";
 import {ContainerImage, FargatePlatformVersion} from "aws-cdk-lib/aws-ecs";
 import {Repository} from "aws-cdk-lib/aws-ecr";
 import {ContractsEnverCdk} from "@ondemandenv/odmd-contracts/lib/odmd-model/contracts-enver-cdk";
+import {
+    SampleSpringOpenApi3CdkEnver
+} from "@ondemandenv/odmd-contracts/lib/repos/sample-spring-openapi3/sample-spring-open-api3-cdk";
 
 export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
-
-
-        const myEnver = OndemandContracts.inst.springOpen3Cdk;
+        let tmp = OndemandContracts.inst.getTargetEnver();
+        const myEnver = tmp as SampleSpringOpenApi3CdkEnver;
 
         const vpc = new Vpc(this, 'vpc', {maxAzs: 2, natGateways: 1});
 
