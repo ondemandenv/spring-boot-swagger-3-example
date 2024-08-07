@@ -16,31 +16,31 @@ export class CdkStack extends cdk.Stack {
         let tmp = OndemandContracts.inst.getTargetEnver();
         const myEnver = tmp as SampleSpringOpenApi3CdkEnver;
 
-        const vpc = new Vpc(this, 'vpc', {maxAzs: 2, natGateways: 1});
 
         const repository = Repository.fromRepositoryName(this, 'repo', myEnver.appImgRepoRef.getSharedValue(this));
         const image = ContainerImage.fromEcrRepository(
             repository,
             myEnver.appImgLatestRef.getSharedValue(this),
         )
+        /*
+                const vpc = new Vpc(this, 'vpc', {maxAzs: 2, natGateways: 1});
+                const fargate = new ApplicationLoadBalancedFargateService(this, 'theAlbFargate', {
+                    vpc,
+                    cpu: 1024,
+                    memoryLimitMiB: 2048,
+                    platformVersion: FargatePlatformVersion.VERSION1_4,
+                    taskImageOptions: {
+                        image: image,
+                        containerPort: 8080,
+                    },
+                    publicLoadBalancer: true
+                })
 
-        const fargate = new ApplicationLoadBalancedFargateService(this, 'theAlbFargate', {
-            vpc,
-            cpu: 1024,
-            memoryLimitMiB: 2048,
-            platformVersion: FargatePlatformVersion.VERSION1_4,
-            taskImageOptions: {
-                image: image,
-                containerPort: 8080,
-            },
-            publicLoadBalancer: true
-        })
-
-        // @ts-ignore
-        fargate.targetGroup.healthCheck.path = '/bezkoder-api-docs'
+                // @ts-ignore
+                fargate.targetGroup.healthCheck.path = '/bezkoder-api-docs'*/
 
         new ContractsShareOut(this, new Map<ContractsCrossRefProducer<ContractsEnverCdk>, string>([
-            [myEnver.apiEndpoint, fargate.loadBalancer.loadBalancerDnsName],
+            [myEnver.apiEndpoint, repository.repositoryUri],
         ]))
     }
 }
