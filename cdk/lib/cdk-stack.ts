@@ -41,6 +41,7 @@ export class CdkStack extends cdk.Stack {
 
         new ContractsShareOut(this, new Map<ContractsCrossRefProducer<ContractsEnverCdk>, string>([
             [myEnver.apiEndpoint, 'gaga+' + repository.repositoryUri],
+            [myEnver.apiEndpoint.children![0], 'gaga+' + repository.repositoryUri],
         ]))
     }
 }
