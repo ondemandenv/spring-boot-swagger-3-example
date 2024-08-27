@@ -40,7 +40,8 @@ export class CdkStack extends cdk.Stack {
                 fargate.targetGroup.healthCheck.path = '/bezkoder-api-docs'*/
 
         new ContractsShareOut(this, new Map<ContractsCrossRefProducer<ContractsEnverCdk>, string>([
-            [myEnver.apiEndpoint, repository.repositoryUri],
+            [myEnver.apiEndpoint, 'gaga+' + repository.repositoryUri],
+            [myEnver.apiEndpoint.children![0], 'gaga+' + repository.repositoryUri],
         ]))
     }
 }
