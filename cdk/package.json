@@ -8,9 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk-diff": "tsc --build && cross-env target_build_id=sampleSpringOpenAPI3cdk target_rev_ref=b..master-_b..ta cdk diff * --profile AdministratorAccess-590184130740",
-    "cdk-deploy": "tsc --build && cross-env target_build_id=sampleSpringOpenAPI3cdk target_rev_ref=b..master-_b..ta cdk deploy * --parameters ContractsShareInNow=1722306756967  --require-approval never -v --profile AdministratorAccess-590184130740",
-    "cdk-ls": "tsc --build && cross-env target_build_id=sampleSpringOpenAPI3cdk target_rev_ref=b..master-_b..ta cdk ls --profile AdministratorAccess-590184130740"
+    "cdk-diff": "tsc --build && cross-env target_build_id=sampleSpringOpenAPI3cdk target_rev_ref=b..master-_b..ta cdk diff * --profile sandbox-workspace2",
+    "cdk-deploy": "tsc --build && cross-env target_build_id=sampleSpringOpenAPI3cdk target_rev_ref=b..master-_b..ta cdk deploy * --parameters ContractsShareInNow=1722306756967  --require-approval never -v --profile sandbox-workspace2",
+    "cdk-ls": "tsc --build && cross-env target_build_id=sampleSpringOpenAPI3cdk target_rev_ref=b..master-_b..ta cdk ls --profile sandbox-workspace2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -19,12 +19,12 @@
     "@ondemandenv/odmd-contracts": "0.1.89-a34",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.5",
-    "aws-cdk": "2.149.0",
+    "aws-cdk": "2.154.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.5.3"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.149.0",
+    "aws-cdk-lib": "2.154.1",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"
   }
