@@ -23,19 +23,30 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+      
       - uses: ondemandenv/wflact-resolvEnvars@main
-        with:
-          aws_credentials: ${{github.event.inputs.aws_credentials}}
-      - uses: ondemandenv/wflact-odmdBuild@main
         with:
           aws_credentials: ${{github.event.inputs.aws_credentials}}
           trigger_message: ${{github.event.inputs.message}}
         env:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           ODMD_buildId: sampleSpringOpenAPI3img
-          ODMD_workDirs: .
-          ODMD_buildType: ContainerImageEcr
           ODMD_awsRegion: us-west-1
           ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3img_ContainerImageEcrus_west_1_workspace1'] }}
+      
+      - run: |
+          set -ex
+          cd ${{ env.ODMD_work_dir }}
+          env | grep -i ^ODMD
+          ${{ env.ODMD_entry_cmd }} || echo 'continue any ...'
+        env:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ODMD_buildId: sampleSpringOpenAPI3img
+          ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3img_ContainerImageEcrus_west_1_workspace1'] }}      
+          
+      - uses: ondemandenv/wflact-buildProduces@main
+        env:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ODMD_buildId: sampleSpringOpenAPI3img
+          ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3img_ContainerImageEcrus_west_1_workspace1'] }}
 
-#1
+#
