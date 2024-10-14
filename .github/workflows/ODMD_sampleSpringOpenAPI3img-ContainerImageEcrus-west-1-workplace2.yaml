@@ -6,7 +6,7 @@ on:
     inputs:
       aws_credentials:
         type: string
-        description: | 
+        description: |
           Your AWS credentials in the format:
           [0123456789_MyRole_profile]
           aws_access_key_id=01234_id
@@ -35,4 +35,4 @@ jobs:
           ODMD_awsRegion: us-west-1
           ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3img_ContainerImageEcrus_west_1_workplace2'] }}
 
-#
+#4
