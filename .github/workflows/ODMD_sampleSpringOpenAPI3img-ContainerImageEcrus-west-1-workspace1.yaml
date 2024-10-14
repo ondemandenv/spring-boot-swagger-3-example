@@ -37,7 +37,7 @@ jobs:
           set -ex
           cd ${{ env.ODMD_work_dir }}
           env | grep -i ^ODMD
-          ${{ env.ODMD_entry_cmd }} || echo 'continue anyway ...'
+          ${{ env.ODMD_entry_cmd }}||echo 'continue anyway ...'
         env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ODMD_buildId: sampleSpringOpenAPI3img
