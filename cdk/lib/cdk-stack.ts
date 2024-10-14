@@ -1,19 +1,14 @@
 import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
-import {ContractsCrossRefProducer, ContractsShareOut, OndemandContracts} from "@ondemandenv/odmd-contracts";
-import {ApplicationLoadBalancedFargateService} from "aws-cdk-lib/aws-ecs-patterns";
-import {Vpc} from "aws-cdk-lib/aws-ec2";
+import {OdmdCrossRefProducer, OdmdEnverCdk, OdmdShareOut} from "@ondemandenv/contracts-lib-base";
 import {ContainerImage, FargatePlatformVersion} from "aws-cdk-lib/aws-ecs";
 import {Repository} from "aws-cdk-lib/aws-ecr";
-import {ContractsEnverCdk} from "@ondemandenv/odmd-contracts/lib/odmd-model/contracts-enver-cdk";
-import {
-    SampleSpringOpenApi3CdkEnver
-} from "@ondemandenv/odmd-contracts/lib/repos/sample-spring-openapi3/sample-spring-open-api3-cdk";
+import {OndemandContractsSandbox, SampleSpringOpenApi3CdkEnver} from "@ondemandenv/odmd-contracts-sandbox";
 
 export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
-        let tmp = OndemandContracts.inst.getTargetEnver();
+        let tmp = OndemandContractsSandbox.inst.getTargetEnver();
         const myEnver = tmp as SampleSpringOpenApi3CdkEnver;
 
 
@@ -39,7 +34,7 @@ export class CdkStack extends cdk.Stack {
                 // @ts-ignore
                 fargate.targetGroup.healthCheck.path = '/bezkoder-api-docs'*/
 
-        new ContractsShareOut(this, new Map<ContractsCrossRefProducer<ContractsEnverCdk>, string>([
+        new OdmdShareOut(this, new Map<OdmdCrossRefProducer<OdmdEnverCdk>, string>([
             [myEnver.apiEndpoint, 'gaga+' + repository.repositoryUri],
             [myEnver.apiEndpoint.children![0], 'gaga+' + repository.repositoryUri],
         ]))
