@@ -35,9 +35,11 @@ jobs:
           ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3cdk_CdkGithubWFus_west_1_workspace1'] }}
       
       - run: |
-          set -ex
           cd ${{ env.ODMD_work_dir }}
           env | grep -i ^ODMD
+          pwd
+          
+          set -ex
           
           if [ -f ${{ env.ODMD_entry_cmd }} ]; then
             chmod +x ${{ env.ODMD_entry_cmd }}
