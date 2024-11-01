@@ -34,10 +34,13 @@ jobs:
           ODMD_awsRegion: us-west-1
           ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3cdk_CdkGithubWFus_west_1_workspace1'] }}
       
-      - run: |
-          set -ex
+      - name: run script from rep
+        run: |
           cd ${{ env.ODMD_work_dir }}
           env | grep -i ^ODMD
+          pwd
+          
+          set -ex
           
           if [ -f ${{ env.ODMD_entry_cmd }} ]; then
             chmod +x ${{ env.ODMD_entry_cmd }}
