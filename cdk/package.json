@@ -8,9 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk-diff": "tsc --build && cross-env odmd_build_id=sampleSpringOpenAPI3cdk odmd_rev_ref=b..master-_b..ta cdk diff * --profile sandbox-workspace2",
-    "cdk-deploy": "tsc --build && cross-env odmd_build_id=sampleSpringOpenAPI3cdk odmd_rev_ref=b..master-_b..ta cdk deploy * --parameters ContractsShareInNow=1722306756967  --require-approval never -v --profile sandbox-workspace2",
-    "cdk-ls": "tsc --build && cross-env odmd_build_id=sampleSpringOpenAPI3cdk odmd_rev_ref=b..master-_b..ta cdk ls --profile sandbox-workspace2"
+    "cdk-diff": "tsc --build && cross-env ODMD_build_id=sampleSpringOpenAPI3cdk ODMD_rev_ref=b..master-_b..ta cdk diff * --profile sandbox-workspace2",
+    "cdk-deploy": "tsc --build && cross-env ODMD_build_id=sampleSpringOpenAPI3cdk ODMD_rev_ref=b..master-_b..ta cdk deploy * --parameters ContractsShareInNow=1722306756967  --require-approval never -v --profile sandbox-workspace2",
+    "cdk-ls": "tsc --build && cross-env ODMD_build_id=sampleSpringOpenAPI3cdk ODMD_rev_ref=b..master-_b..ta cdk ls --profile sandbox-workspace2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
