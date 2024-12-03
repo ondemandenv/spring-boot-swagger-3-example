@@ -35,8 +35,8 @@ export class CdkStack extends cdk.Stack {
                 fargate.targetGroup.healthCheck.path = '/bezkoder-api-docs'*/
 
         new OdmdShareOut(this, new Map<OdmdCrossRefProducer<OdmdEnverCdk>, string>([
-            [myEnver.apiEndpoint, 'gaga+' + repository.repositoryUri],
-            [myEnver.apiEndpoint.children![0], 'gaga+' + repository.repositoryUri],
+            [myEnver.apiEndpoint, repository.repositoryUri],
+            [myEnver.apiEndpoint.children![0], repository.repositoryUri],
         ]))
     }
 }

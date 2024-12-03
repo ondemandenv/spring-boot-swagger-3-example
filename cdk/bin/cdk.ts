@@ -26,6 +26,7 @@ async function main() {
 
     new OndemandContractsSandbox(app)
 
+    console.log(JSON.stringify(process.env, null, 4));
 
     const targetEnver = OndemandContractsSandbox.inst.getTargetEnver() as OdmdEnverCdk
 
