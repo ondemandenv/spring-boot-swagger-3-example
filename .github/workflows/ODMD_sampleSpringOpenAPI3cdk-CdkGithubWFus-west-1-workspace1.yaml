@@ -6,6 +6,8 @@ on:
     inputs:
       aws_credentials:
         type: string
+        required: false
+        default: ''
         description: | 
           Your AWS credentials in the format:
           [workspace1_Role/Profile]
@@ -14,7 +16,14 @@ on:
           aws_session_token=token0123456789
       message:
         type: string
-        description: additional message
+        required: false
+        default: ''
+        description: 'additional message'
+      ghWflPpStackName:
+        type: string
+        required: false
+        default: ''
+        description: 'the stack to reload, ignored by default'
 jobs:
   odmd_job:
     runs-on: ubuntu-latest
