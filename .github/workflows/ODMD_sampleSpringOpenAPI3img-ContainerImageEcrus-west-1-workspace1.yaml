@@ -29,6 +29,7 @@ jobs:
           aws_credentials: ${{github.event.inputs.aws_credentials}}
           trigger_message: ${{github.event.inputs.message}}
         env:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           ODMD_buildId: sampleSpringOpenAPI3img
           ODMD_awsRegion: us-west-1
           ODMD_SECRETS: ${{ secrets['ODMD_SECRETS_ODMD_sampleSpringOpenAPI3img_ContainerImageEcrus_west_1_workspace1'] }}
