@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class SpringBootSwagger3ExampleApplicationTests {
-
+/*trigger build*/
 	@Test
 	void contextLoads() {
 	}

@@ -11,7 +11,6 @@ export class CdkStack extends cdk.Stack {
         let tmp = OndemandContractsSandbox.inst.getTargetEnver();
         const myEnver = tmp as SampleSpringOpenApi3CdkEnver;
 
-
         const repository = Repository.fromRepositoryName(this, 'repo', myEnver.appImgRepoRef.getSharedValue(this));
         const image = ContainerImage.fromEcrRepository(
             repository,
