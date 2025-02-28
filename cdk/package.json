@@ -13,8 +13,8 @@
     "cdk-ls": "tsc --build && cross-env ODMD_build_id=sampleSpringOpenAPI3cdk ODMD_rev_ref=b..master cdk ls --profile sandbox-workspace2"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/node": "20.14.9",
+    "@types/jest": "^29.5.14",
+    "@types/node": "20.17.19",
     "cross-env": "^7.0.3",
     "@ondemandenv/odmd-contracts-sandbox": "0.0.78",
     "cdk8s-plus-31": "^2.1.2",
