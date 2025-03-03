@@ -81,7 +81,7 @@ export class CdkStack extends cdk.Stack {
          */
         const podSaRole = new Role(this, 'podSaRole', {
             assumedBy: new FederatedPrincipal(
-                myEnver.defaultNodeGroupRoleArn.getSharedValue(this),
+                myEnver.oidcProvider.getSharedValue(this),
                 {
                     StringEquals: new CfnJson(this, 'podSaRoleOidcProvider', {
                         value: {
