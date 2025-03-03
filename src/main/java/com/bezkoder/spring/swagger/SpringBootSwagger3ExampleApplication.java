@@ -8,7 +8,6 @@ public class SpringBootSwagger3ExampleApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootSwagger3ExampleApplication.class, args);
-		System.out.println( "change sha 7");
 	}
 
 }
