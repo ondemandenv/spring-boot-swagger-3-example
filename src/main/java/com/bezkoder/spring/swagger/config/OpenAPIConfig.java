@@ -37,8 +37,6 @@ public class OpenAPIConfig {
     @Bean
     public S3Client s3Client() {
 
-        AwsCredentialsProvider credentialsProvider = null;
-
         try {
             return S3Client.builder().credentialsProvider(
                     ProfileCredentialsProvider.builder().profileName("sandbox-workspace1").build()
