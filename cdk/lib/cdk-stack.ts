@@ -104,7 +104,7 @@ export class CdkStack extends cdk.Stack {
             }
         })
 
-        const bucket = new Bucket(this, 'app-bucket')
+        const bucket = new Bucket(this, 'app-bucket', {autoDeleteObjects: true, removalPolicy: cdk.RemovalPolicy.DESTROY});
         bucket.grantReadWrite(podSaRole)
 
 
