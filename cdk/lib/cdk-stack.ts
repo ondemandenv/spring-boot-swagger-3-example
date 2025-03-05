@@ -143,7 +143,6 @@ export class CdkStack extends cdk.Stack {
 
         //todo: deployedManifest.getValueByJsonPath('spec.template.spec.containers[0].env[0].value')
 
-
     }
 
     //todo: move to EksManifest static method
