@@ -73,8 +73,8 @@ export class CdkStack extends cdk.Stack {
 
         const oidcProvider = myEnver.oidcProvider.getSharedValue(this)
 
-        const serviceAccountName = myEnver.node.id
-        const namespace = myEnver.node.id
+        const namespace = this.sanitizeKubernetesNamespace(myEnver.owner.buildId + myEnver.targetRevision.toPathPartStr())
+        const serviceAccountName = namespace
 
         /**
          * the role AWS SDK will assume automatically
@@ -104,7 +104,10 @@ export class CdkStack extends cdk.Stack {
             }
         })
 
-        const bucket = new Bucket(this, 'app-bucket', {autoDeleteObjects: true, removalPolicy: cdk.RemovalPolicy.DESTROY});
+        const bucket = new Bucket(this, 'app-bucket', {
+            autoDeleteObjects: true,
+            removalPolicy: cdk.RemovalPolicy.DESTROY
+        });
         bucket.grantReadWrite(podSaRole)
 
 
@@ -132,7 +135,6 @@ export class CdkStack extends cdk.Stack {
 
         const deployedManifest = new EksManifest(this, 'eks-manifest', {
             targetEksCluster: OndemandContractsSandbox.inst.eksCluster!.envers[0],
-            pruneLabels: '',
             overWrite: true,
             enver: myEnver,
             skipValidate: false,
@@ -144,4 +146,26 @@ export class CdkStack extends cdk.Stack {
 
 
     }
+
+    //todo: move to EksManifest static method
+    sanitizeKubernetesNamespace(namespace: string): string {
+        // Kubernetes namespace naming rules:
+        // - At most 63 characters.
+        // - Only lowercase alphanumeric characters or '-'.
+        // - Must start and end with an alphanumeric character.
+        let sanitized = namespace.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
+        sanitized = sanitized.replace(/^-+|-+$/g, '');
+        sanitized = sanitized.replace(/-{2,}/g, '-');
+        if (sanitized.length > 63) {
+            sanitized = sanitized.substring(0, 63);
+        }
+        if (!/^[a-z0-9]/.test(sanitized)) {
+            sanitized = sanitized.length > 0 ? "a" + sanitized : "default";
+        }
+        if (!/[a-z0-9]$/.test(sanitized)) {
+            sanitized = sanitized + "a";
+        }
+        return sanitized;
+    }
+
 }
