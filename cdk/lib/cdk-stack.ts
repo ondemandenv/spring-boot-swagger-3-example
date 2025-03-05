@@ -13,6 +13,7 @@ import {CfnJson, Fn} from "aws-cdk-lib";
 import {ArnPrincipal, FederatedPrincipal, Policy, PolicyDocument, PolicyStatement, Role} from "aws-cdk-lib/aws-iam";
 import {ServiceAccount} from "cdk8s-plus-31/lib/service-account";
 import {Bucket} from "aws-cdk-lib/aws-s3";
+import {Size} from "cdk8s/lib/size";
 
 export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -121,6 +122,10 @@ export class CdkStack extends cdk.Stack {
                     envVariables: {
                         bucket_arn: {value: bucket.bucketArn},
                         region: {value: this.region}
+                    },
+                    resources: {
+                        cpu: {limit: {amount: '1500m'}},
+                        memory: {limit: Size.mebibytes(700)},
                     }
                 }
             ],
