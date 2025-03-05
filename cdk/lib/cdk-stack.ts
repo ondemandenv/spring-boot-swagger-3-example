@@ -124,7 +124,7 @@ export class CdkStack extends cdk.Stack {
                         region: {value: this.region}
                     },
                     resources: {
-                        cpu: {limit: {amount: '900m'}},
+                        cpu: {limit: {amount: '900m'}, request: {amount: '400m'}},
                         memory: {limit: Size.mebibytes(700)},
                     }
                 }
