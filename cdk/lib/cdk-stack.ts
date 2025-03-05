@@ -134,6 +134,7 @@ export class CdkStack extends cdk.Stack {
 
         const deployedManifest = new EksManifest(this, 'eks-manifest', {
             targetEksCluster: OndemandContractsSandbox.inst.eksCluster!.envers[0],
+            k8sNamespace: namespace,
             overWrite: true,
             enver: myEnver,
             skipValidate: false,
