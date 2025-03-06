@@ -113,7 +113,7 @@ export class CdkStack extends cdk.Stack {
 
         // PersistentVolumeClaim
         const pvc = new PersistentVolumeClaim(chart, 'PersistentVolumeClaim', {
-            metadata: {name: 'my-pvc', namespace: 'default'},
+            metadata: {name: 'my-pvc', namespace: 'default-test-lambda-err'},
             accessModes: [PersistentVolumeAccessMode.READ_WRITE_ONCE],
             storage: cdk8s.Size.gibibytes(1),
             storageClassName: 'ebs-sc',
