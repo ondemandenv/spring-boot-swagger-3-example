@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {EksManifest} from "@ondemandenv/contracts-lib-base";
-import {ContainerImage, EcrImage} from "aws-cdk-lib/aws-ecs";
+import {ContainerImage} from "aws-cdk-lib/aws-ecs";
 import {Repository} from "aws-cdk-lib/aws-ecr";
 import {
     OndemandContractsSandbox,
@@ -36,31 +36,6 @@ export class CdkStack extends cdk.Stack {
         const image = ContainerImage.fromEcrRepository(
             repository, tag0 // or 'latest' or todo: from param store
         )
-
-        /*
-                const vpc = new Vpc(this, 'vpc', {maxAzs: 2, natGateways: 1});
-                const fargate = new ApplicationLoadBalancedFargateService(this, 'theAlbFargate', {
-                    vpc,
-                    cpu: 1024,
-                    memoryLimitMiB: 2048,
-                    platformVersion: FargatePlatformVersion.VERSION1_4,
-                    taskImageOptions: {
-                        image: image,
-                        containerPort: 8080,
-                    },
-                    publicLoadBalancer: true
-                })
-
-                // @ts-ignore
-                fargate.targetGroup.healthCheck.path = '/bezkoder-api-docs'
-
-        new OdmdShareOut(this, new Map<OdmdCrossRefProducer<OdmdEnverCdk>, string>([
-            [myEnver.apiEndpoint, repository.repositoryUri],
-            [myEnver.apiEndpoint.children![0], repository.repositoryUri],
-        ]))
-
-*/
-
 
         const oidcProvider = myEnver.oidcProvider.getSharedValue(this)
 
@@ -113,7 +88,7 @@ export class CdkStack extends cdk.Stack {
 
         // PersistentVolumeClaim
         const pvc = new PersistentVolumeClaim(chart, 'PersistentVolumeClaim', {
-            metadata: {name: 'my-pvc', namespace: 'default-test-lambda-err'},
+            metadata: {name: 'my-pvc'},
             accessModes: [PersistentVolumeAccessMode.READ_WRITE_ONCE],
             storage: cdk8s.Size.gibibytes(1),
             storageClassName: 'ebs-sc',
@@ -153,6 +128,37 @@ export class CdkStack extends cdk.Stack {
             enver: myEnver,
             skipValidate: false,
             manifest: chart
+            //todo: outputs:[ 'spec.template.spec.containers[0].env[0].value', 'spec.template.spec.containers[0].IpAddress ... dns '
         })
+
+        /**
+         * this is how fragmented k8s is, it's designed to be manually operated
+         * to get the value from the deployed manifest, there has to be some kind of loop to watch it and get it back
+         * No time to do that, so just put it here
+         * //todo: 1) deployedManifest.getValueByJsonPath('spec.template.spec.containers[0].env[0].value')
+         * //todo: 2) add ingress and output the dns
+         * with fargate, it's just straight forward
+         * fargate.loadBalancer.loadBalancerDnsName
+         */
+
+        /* example of using fargate which is way simpler
+                        const vpc = new Vpc(this, 'vpc', {maxAzs: 2, natGateways: 1});
+                        const fargate = new ApplicationLoadBalancedFargateService(this, 'theAlbFargate', {
+                            vpc,
+                            cpu: 1024,
+                            memoryLimitMiB: 2048,
+                            platformVersion: FargatePlatformVersion.VERSION1_4,
+                            taskImageOptions: {
+                                image: image,
+                                containerPort: 8080,
+                            },
+                            publicLoadBalancer: true
+                        })
+
+                        // @ts-ignore
+                        fargate.targetGroup.healthCheck.path = '/bezkoder-api-docs'
+        */
+
+
     }
 }

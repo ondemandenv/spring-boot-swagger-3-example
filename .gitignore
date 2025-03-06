@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+**/node_modules
+**/cdk.out
+**/dist
+
 ### STS ###
 .apt_generated
 .classpath
