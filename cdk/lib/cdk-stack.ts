@@ -10,7 +10,7 @@ import {
 import * as cdk8s from 'cdk8s'
 import * as cdk8spl from 'cdk8s-plus-31'
 import {CfnJson, Fn} from "aws-cdk-lib";
-import {ArnPrincipal, FederatedPrincipal, Policy, PolicyDocument, PolicyStatement, Role} from "aws-cdk-lib/aws-iam";
+import {FederatedPrincipal, PolicyDocument, PolicyStatement, Role} from "aws-cdk-lib/aws-iam";
 import {ServiceAccount} from "cdk8s-plus-31/lib/service-account";
 import {Bucket} from "aws-cdk-lib/aws-s3";
 import {Size} from "cdk8s/lib/size";
@@ -58,19 +58,6 @@ export class CdkStack extends cdk.Stack {
 
 */
 
-
-        /**
-         * let Eks node load image from my ecr repo
-         * this requires the repo is defined in same account/region
-         */
-        repository.addToResourcePolicy(new PolicyStatement({
-            principals: [new ArnPrincipal(myEnver.defaultNodeGroupRoleArn.getSharedValue(this))],
-            actions: [
-                'ecr:GetDownloadUrlForLayer',
-                'ecr:BatchGetImage',
-                'ecr:BatchCheckLayerAvailability',
-            ],
-        }));
 
         const oidcProvider = myEnver.oidcProvider.getSharedValue(this)
 
