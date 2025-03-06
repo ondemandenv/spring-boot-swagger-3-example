@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {EksManifest} from "@ondemandenv/contracts-lib-base";
-import {ContainerImage} from "aws-cdk-lib/aws-ecs";
+import {ContainerImage, EcrImage} from "aws-cdk-lib/aws-ecs";
 import {Repository} from "aws-cdk-lib/aws-ecr";
 import {
     OndemandContractsSandbox,
@@ -14,6 +14,9 @@ import {FederatedPrincipal, PolicyDocument, PolicyStatement, Role} from "aws-cdk
 import {ServiceAccount} from "cdk8s-plus-31/lib/service-account";
 import {Bucket} from "aws-cdk-lib/aws-s3";
 import {Size} from "cdk8s/lib/size";
+import {PersistentVolumeClaim, Volume, VolumeMount} from 'cdk8s-plus-31';
+import {KubeStorageClass} from "cdk8s-plus-31/lib/imports/k8s";
+import {PersistentVolumeAccessMode} from "cdk8s-plus-31/lib/pvc";
 
 export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -61,7 +64,8 @@ export class CdkStack extends cdk.Stack {
 
         const oidcProvider = myEnver.oidcProvider.getSharedValue(this)
 
-        const namespace = this.sanitizeKubernetesNamespace(myEnver.owner.buildId + myEnver.targetRevision.toPathPartStr())
+        const namespace = EksManifest.sanitizeKubernetesNamespace(myEnver.owner.buildId + myEnver.targetRevision.toPathPartStr())
+
         const serviceAccountName = namespace
 
         /**
@@ -97,8 +101,23 @@ export class CdkStack extends cdk.Stack {
         });
         bucket.grantReadWrite(podSaRole)
 
-
         const chart = new cdk8s.Chart(new cdk8s.App(), 'theChart')
+
+        // StorageClass
+        new KubeStorageClass(chart, 'StorageClass', {
+            metadata: {name: 'ebs-sc'},
+            provisioner: 'ebs.csi.aws.com',
+            volumeBindingMode: 'WaitForFirstConsumer',
+            parameters: {type: 'gp3'},
+        });
+
+        // PersistentVolumeClaim
+        const pvc = new PersistentVolumeClaim(chart, 'PersistentVolumeClaim', {
+            metadata: {name: 'my-pvc', namespace: 'default'},
+            accessModes: [PersistentVolumeAccessMode.READ_WRITE_ONCE],
+            storage: cdk8s.Size.gibibytes(1),
+            storageClassName: 'ebs-sc',
+        });
 
         new cdk8spl.Deployment(chart, 'to-eks', {
             containers: [
@@ -113,7 +132,10 @@ export class CdkStack extends cdk.Stack {
                     resources: {
                         cpu: {limit: {amount: '900m'}, request: {amount: '400m'}},
                         memory: {limit: Size.mebibytes(700)},
-                    }
+                    },
+                    volumeMounts: [
+                        {path: '/tmp', volume: Volume.fromPersistentVolumeClaim(this, 'vol-pvc', pvc)}
+                    ]
                 }
             ],
             serviceAccount: new ServiceAccount(chart, 'sa', {
@@ -132,31 +154,5 @@ export class CdkStack extends cdk.Stack {
             skipValidate: false,
             manifest: chart
         })
-
-
-        //todo: deployedManifest.getValueByJsonPath('spec.template.spec.containers[0].env[0].value')
-
     }
-
-    //todo: move to EksManifest static method
-    sanitizeKubernetesNamespace(namespace: string): string {
-        // Kubernetes namespace naming rules:
-        // - At most 63 characters.
-        // - Only lowercase alphanumeric characters or '-'.
-        // - Must start and end with an alphanumeric character.
-        let sanitized = namespace.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-        sanitized = sanitized.replace(/^-+|-+$/g, '');
-        sanitized = sanitized.replace(/-{2,}/g, '-');
-        if (sanitized.length > 63) {
-            sanitized = sanitized.substring(0, 63);
-        }
-        if (!/^[a-z0-9]/.test(sanitized)) {
-            sanitized = sanitized.length > 0 ? "a" + sanitized : "default";
-        }
-        if (!/[a-z0-9]$/.test(sanitized)) {
-            sanitized = sanitized + "a";
-        }
-        return sanitized;
-    }
-
 }
